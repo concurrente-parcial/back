@@ -1,20 +1,17 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
-	"github.com/gorilla/mux"
+	"github.com/concurrente-parcial/back/configs"
+	"github.com/concurrente-parcial/back/routes"
+	"github.com/gofiber/fiber/v2"
 )
 
-func initializeRouter() {
+func main() {
+	app := fiber.New()
 
-	r := mux.NewRouter()
+	configs.ConnectDB()
 
-	r.HandleFunc("/login", Login).Methods("POST")
+	routes.UserRoute(app)
 
-	r.HandleFunc("/verification", Verificatio).Methods("POST")
-
-	log.Fatal(http.ListenAndServe(":9000", r))
-
+	app.Listen(":6000")
 }
