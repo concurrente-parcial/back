@@ -13,6 +13,7 @@ func UserRoute(app *fiber.App) {
 	// app.Post("/verification", func(c *fiber.Ctx) error {
 	// 	return c.JSON(&fiber.Map{"data": "Hello from Fiber & mongoDB"})
 	// })
+	app.Get("/user/:userId", controllers.GetUser) //add this
 
 	app.Post("/user", controllers.CreateUser) //add this
 	app.Get("/users", controllers.GetAllUsers)
