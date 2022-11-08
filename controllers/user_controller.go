@@ -12,7 +12,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -79,13 +78,12 @@ func GetAllUsers(c *fiber.Ctx) error {
 
 func GetUser(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	userId := c.Params("userId")
+	email := c.Params("email")
+	password := c.Params("password")
 	var user models.User
 	defer cancel()
 
-	objId, _ := primitive.ObjectIDFromHex(userId)
-
-	err := userCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&user)
+	err := userCollection.FindOne(ctx, bson.M{"email": email, "password": password}).Decode(&user)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
